@@ -14,20 +14,15 @@ const App = () => {
 
   const [selected, setSelected] = useState(0);
   const [votes, setVotes] = useState(
-    // Array.from({ length: anecdotes.length }, () => 0)
-    Array.from({ length: anecdotes.length }, () => 0).reduce(
-      (object, element, index) => ({ ...object, [index]: element }),
-      {}
-    )
+    Array.from({ length: anecdotes.length }, () => 0)
   );
 
-  const getBestJoke = (votes) => {
-    let bestJoke = { index: 0, votes: 0 };
-    for (const [key, value] of Object.entries(votes)) {
-      if (value > bestJoke.votes) {
-        bestJoke = { index: key, votes: value };
-      }
-    }
+  const getBestJoke = (listOfVotes) => {
+    const bestJoke = listOfVotes.reduce(
+      (bestJoke, votes, index) =>
+        votes > bestJoke.votes ? { index, votes } : bestJoke,
+      { index: 0, votes: 0 }
+    );
     return anecdotes[bestJoke.index];
   };
 
@@ -49,8 +44,7 @@ const App = () => {
       <button
         onClick={() =>
           setVotes(
-            // votes.map((vote, index) => (index === selected ? vote + 1 : vote))
-            { ...votes, [selected]: votes[selected] + 1 }
+            votes.map((vote, index) => (index === selected ? vote + 1 : vote))
           )
         }
       >
